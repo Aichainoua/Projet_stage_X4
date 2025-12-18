@@ -1,0 +1,18 @@
+# --- Dépendances (Ne jamais envoyer ça) ---
+/node_modules
+**/node_modules
+/vendor
+**/vendor
+
+# --- Sécurité (Vos mots de passe) ---
+.env
+**/.env
+
+# --- Fichiers générés par le système/Docker ---
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+.nuxt
+.output
+/storage/*.key

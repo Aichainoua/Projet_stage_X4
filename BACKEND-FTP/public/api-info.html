@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Backend - EDULAB AFRIK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .endpoints {
+            margin-top: 30px;
+        }
+        .endpoint {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .endpoint h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        .method.get {
+            background: #48bb78;
+            color: white;
+        }
+        .method.post {
+            background: #4299e1;
+            color: white;
+        }
+        .url {
+            color: #4a5568;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+        .info {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .info p {
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+        .test-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .test-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 API Backend Laravel</h1>
+        <p class="subtitle">EDULAB AFRIK - Backend FTP</p>
+        
+        <div class="status">✅ Serveur en cours d'exécution</div>
+        
+        <div class="info">
+            <p><strong>Version Laravel:</strong> {{ app()->version() }}</p>
+            <p><strong>URL API:</strong> <span id="apiBase">http://localhost:8000/api</span></p>
+            <p><strong>Statut:</strong> <span style="color: #10b981;">✓ Opérationnel</span></p>
+        </div>
+
+        <div class="endpoints">
+            <h2>📡 Endpoints disponibles</h2>
+            
+            <div class="endpoint">
+                <h3>
+                    <span class="method get">GET</span>
+                    Test API
+                </h3>
+                <div class="url">/api/test</div>
+                <a href="/api/test" target="_blank" class="test-btn">Tester →</a>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    Inscription Apprenant
+                </h3>
+                <div class="url">/api/auth/register/apprenant</div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    Inscription Formateur
+                </h3>
+                <div class="url">/api/auth/register/formateur</div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    Connexion
+                </h3>
+                <div class="url">/api/auth/login</div>
+            </div>
+
+            <div class="endpoint">
+                <h3>
+                    <span class="method post">POST</span>
+                    Déconnexion
+                </h3>
+                <div class="url">/api/auth/logout</div>
+                <small style="color: #718096;">(Requiert authentification)</small>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+            <p style="color: #718096; text-align: center;">
+                Pour tester l'API complète, utilisez un client REST comme Postman ou le frontend Nuxt.js
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Mettre à jour l'URL de base dynamiquement
+        document.getElementById('apiBase').textContent = window.location.origin + '/api';
+    </script>
+</body>
+</html>
+

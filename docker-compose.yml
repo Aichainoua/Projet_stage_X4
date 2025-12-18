@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Service 1 : Ton Backend Laravel
+  backend:
+    build:
+      context: ./BACKEND-FTP
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./BACKEND-FTP:/var/www
+    depends_on:
+      - db
+    networks:
+      - edulab-network
+
+  # Service 2 : Ton Frontend Nuxt
+  frontend:
+    build:
+      context: ./FRONTEND-FTP/frontendFTP 
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./FRONTEND-FTP:/app      # Idem ici pour le chemin
+      - /app/node_modules
+    networks:
+      - edulab-network
+
+  # Service 3 : La Base de données (Automatique)
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: edulab_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - "3306:3306"
+    networks:
+      - edulab-network
+
+networks:
+  edulab-network:
+    driver: bridge
