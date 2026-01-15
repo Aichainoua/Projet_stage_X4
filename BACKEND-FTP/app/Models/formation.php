@@ -10,30 +10,29 @@ class Formation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'formateur_id',
-        'niveau_id',
-        'categorie_id',
         'titre',
         'description',
         'prix',
-        'duree_heures',
-        'image_url',
-        'est_publie'
+        'niveau',
+        'date_ouverture', 
+        'prerequis',
+        'competences',
+        'est_mentore',
+        'user_id' 
     ];
 
-    // Relation : Appartient à un formateur
-    public function formateur()
+    
+    public function user()
     {
-        return $this->belongsTo(Formateur::class);
+        return $this->belongsTo(User::class);
     }
 
-    // Relation : A plusieurs cours (chapitres)
     public function cours()
     {
-        return $this->hasMany(Cours::class); // On créera Cours.php juste après pour éviter une erreur
+        return $this->hasMany(Cours::class);
     }
-    
-    // Relation : A plusieurs inscriptions
+
+   
     public function inscriptions()
     {
         return $this->hasMany(Inscription::class);

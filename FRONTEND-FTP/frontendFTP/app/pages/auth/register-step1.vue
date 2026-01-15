@@ -65,7 +65,7 @@
 
       <p class="mt-6 text-sm text-center text-gray-600">
         Vous avez déjà un compte? 
-        <NuxtLink to="/user-login" class="font-medium text-indigo-700 hover:text-indigo-900">Se connecter</NuxtLink>
+        <NuxtLink to="/auth/user-login" class="font-medium text-indigo-700 hover:text-indigo-900">Se connecter</NuxtLink>
       </p>
     </div>
   </div>

@@ -1,17 +1,18 @@
 <template>
   <div class="flex items-center justify-center min-h-screen p-4 bg-gray-50">
-    <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-      <div class="flex items-center gap-3 mb-8">
-        <div class="flex items-center justify-center w-12 h-12 bg-indigo-700 rounded-lg">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg sm:p-8">
+      
+      <div class="flex items-center gap-3 mb-6 sm:mb-8">
+        <div class="flex items-center justify-center w-10 h-10 bg-indigo-700 rounded-lg shrink-0 sm:w-12 sm:h-12">
+          <svg class="w-6 h-6 text-white sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-800">EDULAB AFRIK</h1>
+        <h1 class="text-xl font-bold text-gray-800 sm:text-2xl">EDULAB AFRIK</h1>
       </div>
 
-      <h2 class="mb-6 text-xl font-semibold text-gray-700">Connexion</h2>
+      <h2 class="mb-4 text-xl font-semibold text-gray-700 sm:mb-6">Connexion</h2>
       <p class="mb-6 text-sm text-gray-600">Connectez-vous à votre compte pour continuer</p>
 
       <form @submit.prevent="handleLogin" class="space-y-5">
@@ -54,7 +55,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between text-sm">
+        <div class="flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <div class="flex items-center">
             <input 
               id="remember-me" 
@@ -101,6 +102,8 @@
 </template>
 
 <script setup>
+import { reactive, ref } from 'vue'
+
 const form = reactive({
   email: '',
   password: '',
@@ -111,15 +114,9 @@ const showPassword = ref(false)
 const loading = ref(false)
 const error = ref('')
 
-// Configuration des cookies Nuxt
-const tokenCookie = useCookie('token', { 
-  maxAge: 60 * 60 * 24 * 7, // 7 jours
-  path: '/' 
-}) 
-const userCookie = useCookie('user', {
-  maxAge: 60 * 60 * 24 * 7,
-  path: '/'
-})
+// Configuration des cookies (On garde ça pour les bonnes pratiques Nuxt)
+const tokenCookie = useCookie('token', { maxAge: 60 * 60 * 24 * 7 }) 
+const userCookie = useCookie('user', { maxAge: 60 * 60 * 24 * 7 })
 
 const handleLogin = async () => {
   error.value = ''
@@ -129,18 +126,9 @@ const handleLogin = async () => {
     return
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(form.email)) {
-    error.value = 'Veuillez entrer une adresse email valide'
-    return
-  }
-
   loading.value = true
 
   try {
-    // ------------------------------------------------------------------
-    // APPEL API VERS LARAVEL
-    // ------------------------------------------------------------------
     const response = await $fetch('http://127.0.0.1:8000/api/auth/login', {
       method: 'POST',
       headers: {
@@ -153,38 +141,47 @@ const handleLogin = async () => {
       }
     })
 
-    // Si $fetch ne lance pas d'erreur, c'est que le login est réussi (Code 200)
-    // Notre AuthController renvoie : { access_token, user, role, token_type }
+    // --- CORRECTION CRUCIALE ICI ---
     
-    // 1. Sauvegarde dans les cookies
-    tokenCookie.value = response.access_token
+    // 1. On sécurise le nom du token (Laravel renvoie souvent 'access_token' ou 'token')
+    const token = response.access_token || response.token
+
+    if (!token) {
+        throw new Error("Token non reçu du serveur")
+    }
+
+    // 2. On sauvegarde dans le COOKIE (pour Nuxt)
+    tokenCookie.value = token
     userCookie.value = response.user
+
+    // 3. On sauvegarde AUSSI dans le LOCALSTORAGE (Pour que ta page Formation fonctionne)
+    if (process.client) {
+        localStorage.setItem('token', token)
+        localStorage.setItem('user', JSON.stringify(response.user))
+    }
+
+    // --- GESTION REDIRECTION ---
+    const role = response.role || (response.user ? response.user.role : 'apprenant')
     
-    // 2. Gestion de la redirection selon le rôle
-    const role = response.role || 'apprenant' // Valeur par défaut
+    let redirectPath = '/apprenant/catalogue'
     
-    let redirectPath = '/dashboard'
-    
-    if (role === 'apprenant') {
-        redirectPath = '/apprenant/dashboard'
-    } else if (role === 'formateur') {
-        redirectPath = '/formateur/dashboard'
+    if (role === 'formateur') {
+        // Correction : pas besoin de '/index' à la fin
+        redirectPath = '/formateur/formations' 
     } else if (role === 'admin') {
         redirectPath = '/admin/dashboard'
     }
 
-    // 3. Redirection
+    console.log("Login réussi ! Token sauvegardé. Redirection vers :", redirectPath)
     await navigateTo(redirectPath)
 
   } catch (err) {
     console.error('Erreur login:', err)
-    
-    // Gestion des erreurs Laravel (401 Unauthorized, 422 Validation, 500 Server)
     if (err.response && err.response._data) {
-        // Laravel renvoie souvent le message dans 'message'
+        // Affiche le message précis envoyé par Laravel
         error.value = err.response._data.message || 'Identifiants incorrects.'
     } else {
-        error.value = "Impossible de contacter le serveur. Vérifiez votre connexion."
+        error.value = "Impossible de contacter le serveur."
     }
   } finally {
     loading.value = false

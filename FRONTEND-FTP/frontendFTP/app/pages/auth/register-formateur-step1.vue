@@ -11,7 +11,9 @@
         </div>
         <h1 class="text-2xl font-bold text-gray-800">EDULAB AFRIK</h1>
       </div>
+
       <h2 class="mb-4 text-lg font-semibold text-gray-700">Créer un compte</h2>
+
       <div class="flex gap-2 mb-6">
         <button 
            @click="navigateTo('/auth/register-step1')"
@@ -26,6 +28,7 @@
           FORMATEUR
         </button>
       </div>
+
       <p class="mb-6 text-xs text-gray-500">
         Remplir les coordonnées pour commencer l'inscription en tant que formateur
       </p>
@@ -44,18 +47,22 @@
           <label class="block mb-1 text-sm font-medium text-gray-700">Nom</label>
           <input v-model="form.nom" type="text" placeholder="INOUA" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Prénom</label>
           <input v-model="form.prenom" type="text" placeholder="AICHA" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Email</label>
           <input v-model="form.email" type="email" placeholder="votre@email.com" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Date de naissance</label>
           <input v-model="form.dateNaissance" type="date" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Pays de résidence</label>
           <div class="relative">
@@ -64,6 +71,7 @@
               <span v-else class="text-gray-500">Sélectionnez un pays</span>
               <svg class="w-5 h-5 text-gray-500 transition-transform" :class="{ 'rotate-180': paysDropdownOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
+            
             <div v-if="paysDropdownOpen" class="absolute z-20 w-full mt-2 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg max-h-64">
               <div class="p-2"><input v-model="paysSearch" type="text" placeholder="Rechercher un pays..." class="w-full px-3 py-2 mb-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" @click.stop /></div>
               <div class="overflow-y-auto max-h-48">
@@ -74,6 +82,7 @@
             </div>
           </div>
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Numéro de téléphone</label>
           <div class="flex gap-2">
@@ -87,10 +96,12 @@
             </div>
           </div>
         </div>
+        
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Courte biographie</label>
           <textarea v-model="form.biographie" placeholder="Parlez-nous de vous..." rows="3" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm resize-none" required></textarea>
         </div>
+        
         <button type="submit" class="flex items-center justify-center w-full gap-2 py-3 mt-6 font-semibold text-white transition duration-200 bg-indigo-700 rounded-lg hover:bg-indigo-800">
           Étape suivante
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -101,53 +112,88 @@
 </template>
 
 <script setup>
-// ... Ton script Formateur reste identique ...
+import { ref, computed, onMounted } from 'vue'
+import { navigateTo } from '#app'
+
 const paysDropdownOpen = ref(false)
 const paysSearch = ref('')
+
+// --- NOTE IMPORTANTE ---
+// Assure-toi que les 'id' ci-dessous correspondent EXACTEMENT aux IDs
+// dans ta table 'pays' de ta base de données Laravel.
 const countries = [
-  { code: 'CM', name: 'Cameroun', dialCode: '237', emoji: '🇨🇲' },
-  { code: 'FR', name: 'France', dialCode: '33', emoji: '🇫🇷' },
-  { code: 'BE', name: 'Belgique', dialCode: '32', emoji: '🇧🇪' },
-  { code: 'CH', name: 'Suisse', dialCode: '41', emoji: '🇨🇭' },
-  { code: 'CA', name: 'Canada', dialCode: '1', emoji: '🇨🇦' },
-  { code: 'US', name: 'États-Unis', dialCode: '1', emoji: '🇺🇸' },
-  { code: 'SN', name: 'Sénégal', dialCode: '221', emoji: '🇸🇳' },
-  { code: 'CI', name: 'Côte d\'Ivoire', dialCode: '225', emoji: '🇨🇮' },
-  { code: 'GA', name: 'Gabon', dialCode: '241', emoji: '🇬🇦' },
-  { code: 'BJ', name: 'Bénin', dialCode: '229', emoji: '🇧🇯' },
-  { code: 'TG', name: 'Togo', dialCode: '228', emoji: '🇹🇬' },
+  { id: 1, code: 'CM', name: 'Cameroun', dialCode: '237', emoji: '🇨🇲' },
+  { id: 2, code: 'FR', name: 'France', dialCode: '33', emoji: '🇫🇷' },
+  { id: 3, code: 'BE', name: 'Belgique', dialCode: '32', emoji: '🇧🇪' },
+  { id: 4, code: 'CH', name: 'Suisse', dialCode: '41', emoji: '🇨🇭' },
+  { id: 5, code: 'CA', name: 'Canada', dialCode: '1', emoji: '🇨🇦' },
+  { id: 6, code: 'US', name: 'États-Unis', dialCode: '1', emoji: '🇺🇸' },
+  { id: 7, code: 'SN', name: 'Sénégal', dialCode: '221', emoji: '🇸🇳' },
+  { id: 8, code: 'CI', name: 'Côte d\'Ivoire', dialCode: '225', emoji: '🇨🇮' },
+  { id: 9, code: 'GA', name: 'Gabon', dialCode: '241', emoji: '🇬🇦' },
+  { id: 10, code: 'BJ', name: 'Bénin', dialCode: '229', emoji: '🇧🇯' },
+  { id: 11, code: 'TG', name: 'Togo', dialCode: '228', emoji: '🇹🇬' },
 ]
+
 const sortedCountries = computed(() => { return [...countries].sort((a, b) => a.name.localeCompare(b.name)) })
 const selectedCountry = ref(sortedCountries.value.find(c => c.code === 'CM') || sortedCountries.value[0])
-const form = ref({ nom: '', prenom: '', email: '', telephone: '', dateNaissance: '', pays: 'Cameroun', biographie: '' })
+
+const form = ref({ 
+    nom: '', 
+    prenom: '', 
+    email: '', 
+    telephone: '', 
+    dateNaissance: '', 
+    pays: 'Cameroun', 
+    biographie: '' 
+})
+
 const filteredCountries = computed(() => {
   if (!paysSearch.value) return sortedCountries.value
   const search = paysSearch.value.toLowerCase()
   return sortedCountries.value.filter(country => country.name.toLowerCase().includes(search) || country.dialCode.includes(search))
 })
-const selectCountry = (country) => { selectedCountry.value = country; form.value.pays = country.name; paysDropdownOpen.value = false; paysSearch.value = '' }
+
+const selectCountry = (country) => { 
+    selectedCountry.value = country; 
+    form.value.pays = country.name; 
+    paysDropdownOpen.value = false; 
+    paysSearch.value = '' 
+}
+
 const getPhonePlaceholder = () => {
   if (selectedCountry.value.dialCode === '237') return '6 00 00 00 00'
   if (selectedCountry.value.dialCode === '33') return '6 12 34 56 78'
   if (selectedCountry.value.dialCode === '1') return '555 123 4567'
   return 'Numéro de téléphone'
 }
+
+// --- LOGIQUE DE VALIDATION ET SAUVEGARDE ---
 const handleNext = () => {
   const telephoneComplet = `+${selectedCountry.value.dialCode} ${form.value.telephone}`
+  
   const formData = {
     ...form.value,
     telephone: telephoneComplet,
+    // On ajoute l'ID du pays pour l'envoi au backend
+    pays_id: selectedCountry.value.id, 
     codePays: selectedCountry.value.dialCode,
     nomComplet: `${form.value.prenom} ${form.value.nom}`.trim(),
     paysCode: selectedCountry.value.code,
     paysEmoji: selectedCountry.value.emoji
   }
+  
+  // Sauvegarde dans le LocalStorage
   localStorage.setItem('formateurStep1', JSON.stringify(formData))
-  navigateTo('/register-formateur-step2')
+  
+  // Redirection vers l'étape 2
+  navigateTo('/auth/register-formateur-step2')
 }
+
+// Fermer le dropdown si on clique ailleurs
 onMounted(() => {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.relative')) { paysDropdownOpen.value = false }
   })
-})
+}) 
 </script>

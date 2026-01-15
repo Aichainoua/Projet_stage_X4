@@ -15,7 +15,7 @@ class Formateur extends Model
         'date_naissance',
         'telephone',
         'biographie',
-        'specialite', // Domaine d'expertise
+        'specialite',
         'competences',
         'annees_experience',
         'niveau_etude',
@@ -23,12 +23,16 @@ class Formateur extends Model
         'cv_url',
     ];
 
-    public function user()
+        protected $casts = [
+        'date_naissance' => 'date',
+    ];
+
+      public function user()
     {
         return $this->belongsTo(User::class);
     }
     
-    // Relation vers Pays (Ex: $formateur->pays->nom)
+  
     public function pays()
     {
         return $this->belongsTo(Pays::class);

@@ -12,14 +12,14 @@
         </div>
       </div>
 
-     <nav class="flex-1 py-6 space-y-1">
+      <nav class="flex-1 py-6 space-y-1">
         
-        <NuxtLink to="/formateur/dashboard" active-class="font-bold text-indigo-900 border-l-4 border-indigo-900 bg-indigo-50" class="flex items-center gap-3 px-6 py-3 text-gray-600 transition-colors hover:bg-gray-50">
+        <NuxtLink to="/formateur/" active-class="font-bold text-indigo-900 border-l-4 border-indigo-900 bg-indigo-50" class="flex items-center gap-3 px-6 py-3 text-gray-600 transition-colors hover:bg-gray-50">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
           Tableau de bord
         </NuxtLink>
 
-        <NuxtLink to="/formateur/formations" active-class="font-bold text-white border-l-4 border-indigo-900 bg-indigo-800" class="flex items-center gap-3 px-6 py-3 text-gray-600 transition-colors hover:bg-gray-50">
+        <NuxtLink to="/formateur/formations" active-class="font-bold text-white bg-indigo-800 border-l-4 border-indigo-900" class="flex items-center gap-3 px-6 py-3 text-gray-600 transition-colors hover:bg-gray-50">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
           Mes formations
         </NuxtLink>
@@ -41,8 +41,8 @@
     <div class="flex flex-col flex-1 min-w-0 ml-64">
       <header class="sticky top-0 z-10 flex items-center justify-end h-20 px-8 bg-white border-b border-gray-200">
         <div class="flex items-center gap-3">
-          <div class="flex items-center justify-center w-10 h-10 text-sm font-bold text-white bg-indigo-900 rounded-full">
-            {{ user?.nom?.charAt(0) || 'AI' }}
+          <div class="flex items-center justify-center w-10 h-10 text-sm font-bold tracking-wider text-white bg-indigo-900 rounded-full">
+            {{ initiales }}
           </div>
           <div class="leading-tight text-right">
             <p class="text-sm font-bold text-gray-900">{{ user?.prenom }} {{ user?.nom }}</p>
@@ -60,15 +60,23 @@
 
 <script setup>
 const router = useRouter()
-// On récupère l'utilisateur connecté pour afficher son vrai nom dans le header
 const user = useCookie('user') 
 const token = useCookie('token')
 
+// --- NOUVEAU : Calcul automatique des initiales ---
+const initiales = computed(() => {
+  if (!user.value) return 'FM' // Valeur par défaut si pas d'utilisateur (Ex: FM pour Formateur)
+  
+  const premiereLettrePrenom = user.value.prenom ? user.value.prenom.charAt(0) : ''
+  const premiereLettreNom = user.value.nom ? user.value.nom.charAt(0) : ''
+  
+  // On combine les deux et on met en majuscule
+  return (premiereLettrePrenom + premiereLettreNom).toUpperCase()
+})
+
 const logout = () => {
-  // On supprime les infos
   token.value = null
   user.value = null
-  // On redirige
-  router.push('/login')
+  router.push('/auth/user-login')
 }
 </script>

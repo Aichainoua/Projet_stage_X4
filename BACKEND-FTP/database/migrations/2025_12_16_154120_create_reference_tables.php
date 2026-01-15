@@ -9,17 +9,17 @@ return new class extends Migration
     public function up()
     {
 
-        // Table 2 : Niveaux (pour la Formation)
+       
         Schema::create('niveaux', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle'); // Ex: Débutant, Intermédiaire, Expert
+            $table->string('libelle'); 
             $table->timestamps();
         });
 
-        // Table 3 : Catégories / Types (pour la Formation)
+       
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('nom'); // Ex: Informatique, Langues, Marketing
+            $table->string('nom'); 
             $table->text('description')->nullable();
             $table->timestamps();
         });

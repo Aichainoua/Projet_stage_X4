@@ -40,5 +40,7 @@
   </div>
 </template>
 <script setup>
-definePageMeta({ layout: 'Formateur' })
+definePageMeta({ layout: 'formateur' ,
+   middleware: 'auth'
+})
 </script>

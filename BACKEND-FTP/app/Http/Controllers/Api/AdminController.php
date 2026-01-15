@@ -11,9 +11,7 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    /**
-     * Afficher toutes les données enregistrées dans la base de données
-     */
+   
     public function getAllData()
     {
         try {

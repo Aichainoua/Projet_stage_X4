@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        // Table Pivot : Inscriptions (Qui a acheté quoi ?)
+        
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('formation_id')->constrained()->onDelete('cascade');
             
             $table->decimal('montant_paye', 10, 2);
-            $table->string('moyen_paiement')->nullable(); // OM, MOMO
+            $table->string('moyen_paiement')->nullable(); 
             $table->string('ref_transaction')->nullable();
-            $table->string('statut')->default('en_attente'); // paye, en_attente, echoue
+            $table->string('statut')->default('en_attente'); 
             $table->dateTime('date_inscription')->useCurrent();
             
             $table->timestamps();

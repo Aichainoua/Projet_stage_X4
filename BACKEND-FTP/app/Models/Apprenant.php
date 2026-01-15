@@ -19,8 +19,7 @@ class Apprenant extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
-    // Un apprenant a plusieurs inscriptions (Formations achetées)
+   
     public function inscriptions()
     {
         return $this->hasMany(Inscription::class, 'user_id', 'user_id');

@@ -32,14 +32,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Relation : Un User peut être un Formateur
+    
     public function formateur()
     {
         return $this->hasOne(Formateur::class);
     }
 
-    // Relation : Un User peut être un Apprenant
-    public function apprenant()
+        public function apprenant()
     {
         return $this->hasOne(Apprenant::class);
     }

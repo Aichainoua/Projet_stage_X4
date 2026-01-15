@@ -9,13 +9,22 @@ class Cours extends Model
 {
     use HasFactory;
 
-    // Attention au pluriel : Laravel cherche la table 'cours' (qui existe)
-    protected $table = 'cours'; 
-
-    protected $fillable = ['formation_id', 'titre', 'description', 'ordre'];
+    protected $fillable = [
+        'titre', 
+        'description', 
+        'ordre', 
+        'formation_id', 
+        'duree'
+    ];
 
     public function formation()
     {
         return $this->belongsTo(Formation::class);
+    }
+
+   
+    public function ressources()
+    {
+        return $this->hasMany(Ressource::class);
     }
 }

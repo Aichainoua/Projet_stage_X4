@@ -9,14 +9,13 @@ class Inscription extends Model
 {
     use HasFactory;
 
+   
     protected $fillable = [
         'user_id',
         'formation_id',
-        'montant_paye',
         'moyen_paiement',
-        'ref_transaction',
-        'statut',
-        'date_inscription'
+        'montant_paye',
+        'statut'
     ];
 
     public function user()
@@ -24,7 +23,7 @@ class Inscription extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function formation()
+       public function formation()
     {
         return $this->belongsTo(Formation::class);
     }
