@@ -10,13 +10,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nom complet affiché
-            $table->string('nom')->nullable(); // Nom de famille
+            $table->string('nom'); // Nom complet affiché
             $table->string('prenom')->nullable(); // Prénom
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['admin', 'formateur', 'apprenant'])->default('apprenant');
-            $table->enum('status', ['pending', 'active', 'rejected', 'suspended'])->default('pending');
+            $table->enum('status', ['pending', 'active', 'rejected', 'suspended'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

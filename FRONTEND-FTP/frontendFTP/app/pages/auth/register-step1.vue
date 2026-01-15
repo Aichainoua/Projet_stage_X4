@@ -15,19 +15,19 @@
 
       <div class="flex gap-2 mb-6">
         <button 
-          @click="navigateTo('/register-step1')"
-          class="flex-1 px-4 py-2 font-medium text-white bg-indigo-700 rounded-lg shadow-sm"
+          class="flex-1 px-4 py-2 font-medium text-white bg-indigo-700 rounded-lg shadow-sm cursor-default"
         >
           APPRENANT
         </button>
 
         <button 
-          @click="navigateTo('/register-formateur-step1')"
+          @click="navigateTo('/auth/register-formateur-step1')"
           class="flex-1 px-4 py-2 font-medium text-gray-700 transition bg-gray-100 rounded-lg hover:bg-gray-200 hover:text-indigo-700"
         >
           FORMATEUR
         </button>
       </div>
+      
       <p class="mb-6 text-xs text-gray-500">
         Remplir les coordonnées pour commencer l'inscription en tant qu'apprenant
       </p>
@@ -35,76 +35,37 @@
       <form @submit.prevent="handleRegister" class="space-y-4">
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Nom</label>
-          <input
-            v-model="form.nom"
-            type="text"
-            placeholder="Nom de famille"
-            class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm"
-            required
-          />
+          <input v-model="form.nom" type="text" placeholder="Nom de famille" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
-
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Prénom</label>
-          <input
-            v-model="form.prenom"
-            type="text"
-            placeholder="Prénom"
-            class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm"
-            required
-          />
+          <input v-model="form.prenom" type="text" placeholder="Prénom" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
-
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Email</label>
-          <input
-            v-model="form.email"
-            type="email"
-            placeholder="exemple@email.com"
-            class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm"
-            required
-          />
+          <input v-model="form.email" type="email" placeholder="exemple@email.com" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
-
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Mot de passe</label>
-          <input
-            v-model="form.password"
-            type="password"
-            placeholder="Minimum 8 caractères"
-            class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm"
-            required
-            minlength="8"
-          />
+          <input v-model="form.password" type="password" placeholder="Minimum 8 caractères" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required minlength="8" />
         </div>
-
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
-          <input
-            v-model="form.confirmPassword"
-            type="password"
-            placeholder="Répétez le mot de passe"
-            class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm"
-            required
-          />
+          <input v-model="form.confirmPassword" type="password" placeholder="Répétez le mot de passe" class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-lg focus:ring-2 focus:ring-indigo-700 focus:bg-white transition text-sm" required />
         </div>
-
+        
         <div v-if="error" class="p-3 text-sm text-red-700 whitespace-pre-line border border-red-200 rounded-lg bg-red-50">
           {{ error }}
         </div>
-
-        <button
-          type="submit"
-          :disabled="loading"
-          class="w-full py-3 mt-6 font-semibold text-white transition duration-200 bg-indigo-700 rounded-lg hover:bg-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        
+        <button type="submit" :disabled="loading" class="w-full py-3 mt-6 font-semibold text-white transition duration-200 bg-indigo-700 rounded-lg hover:bg-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed">
           {{ loading ? 'Création en cours...' : 'Créer mon compte' }}
         </button>
       </form>
 
       <p class="mt-6 text-sm text-center text-gray-600">
         Vous avez déjà un compte? 
-        <NuxtLink to="/login" class="font-medium text-indigo-700 hover:text-indigo-900">Se connecter</NuxtLink>
+        <NuxtLink to="/user-login" class="font-medium text-indigo-700 hover:text-indigo-900">Se connecter</NuxtLink>
       </p>
     </div>
   </div>
@@ -125,7 +86,6 @@ const form = ref({
 const handleRegister = async () => {
   error.value = ''
 
-  // 1. Validations Frontend
   if (!form.value.nom || !form.value.prenom || !form.value.email || !form.value.password) {
     error.value = 'Veuillez remplir tous les champs'
     return
@@ -150,8 +110,7 @@ const handleRegister = async () => {
   loading.value = true
 
   try {
-    // 2. Appel API avec $fetch
-    const response = await $fetch('http://127.0.0.1:8000/api/auth/register/apprenant', {
+    const response = await $fetch('http://localhost:8000/api/auth/register/apprenant', {
         method: 'POST',
         body: {
             nom: form.value.nom,
@@ -161,15 +120,13 @@ const handleRegister = async () => {
         }
     })
 
-    // 3. Si succès
     const token = useCookie('token')
     const user = useCookie('user')
     
     token.value = response.access_token
     user.value = response.user
 
-    // 4. Redirection vers le Dashboard Apprenant
-    await navigateTo('/apprenant/dashboard')
+    await navigateTo('/Apprenant/catalogue')
 
   } catch (err) {
     console.error('Erreur inscription:', err)

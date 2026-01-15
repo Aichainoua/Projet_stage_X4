@@ -94,7 +94,7 @@
 
       <p class="mt-6 text-sm text-center text-gray-600">
         Vous n'avez pas de compte ? 
-        <NuxtLink to="/inscription" class="font-medium text-indigo-700 hover:text-indigo-900">S'inscrire</NuxtLink>
+        <NuxtLink to="/auth/register-step1" class="font-medium text-indigo-700 hover:text-indigo-900">S'inscrire</NuxtLink>
       </p>
     </div>
   </div>

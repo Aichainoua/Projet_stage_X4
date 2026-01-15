@@ -1,8 +1,12 @@
+<script setup>
+definePageMeta({ layout: 'formateur' })
+</script>
+
 <template>
   <div>
     <div class="flex items-center justify-between mb-8">
       <div>
-        [cite_start]<h2 class="text-xl font-bold text-gray-900">Mes Formations [cite: 24]</h2>
+        <h2 class="text-xl font-bold text-gray-900">Mes Formations</h2>
         <p class="text-sm text-gray-500">Gerez vos formations et cours</p>
       </div>
       <NuxtLink to="/formateur/formations/create" class="flex items-center gap-2 px-6 py-3 font-bold text-white transition bg-indigo-800 rounded-lg shadow hover:bg-indigo-900">
@@ -27,14 +31,10 @@
             <span class="px-3 py-1 text-xs font-bold text-gray-600 bg-gray-100 rounded-full">Intermediaire</span>
          </div>
          
-         <NuxtLink to="/formateur/formations/1/manage" class="w-full py-3 mt-4 font-bold text-center text-gray-900 transition bg-gray-100 rounded-lg hover:bg-gray-200">
+         <NuxtLink to="/formateur/formations/[id]/manage" class="w-full py-3 mt-4 font-bold text-center text-gray-900 transition bg-gray-100 rounded-lg hover:bg-gray-200">
            Gérer la formation
          </NuxtLink>
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-definePageMeta({ layout: 'Formateur' })
-</script>

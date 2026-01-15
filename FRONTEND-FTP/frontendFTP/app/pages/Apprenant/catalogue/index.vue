@@ -26,7 +26,7 @@
         <div class="flex flex-col flex-1 p-5">
           <div class="flex gap-2 mb-2">
             <span class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">{{ course.level }}</span>
-            [cite_start]<span v-if="course.isRegistered" class="px-2 py-1 text-xs font-bold text-gray-800 bg-gray-100 rounded-full">Inscrit [cite: 17]</span>
+            <span v-if="course.isRegistered" class="px-2 py-1 text-xs font-bold text-gray-800 bg-gray-100 rounded-full">Inscrit</span>
           </div>
 
           <h3 class="mb-1 font-bold text-gray-900">{{ course.title }}</h3>

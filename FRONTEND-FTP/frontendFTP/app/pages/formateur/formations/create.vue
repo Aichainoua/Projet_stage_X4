@@ -2,7 +2,7 @@
   <div class="flex items-start justify-center pt-10">
     <div class="w-full max-w-lg p-8 bg-white border border-gray-100 shadow-lg rounded-xl">
       <h2 class="mb-1 text-xl font-bold text-gray-900">créer une nouvelle formation </h2>
-      <p class="mb-6 text-sm text-gray-500">Remplissez les information de base de votre fomation</p>
+      <p class="mb-6 text-sm text-gray-500">Remplir les information de base de votre fomation</p>
 
       <form class="space-y-5">
         <div>
