@@ -48,7 +48,7 @@
     </div>
 
     <NuxtLink 
-      to="/user-login" 
+      to="/auth/user-login" 
       class="mt-8 text-sm text-gray-500 hover:text-[#1a237e] underline"
     >
       Retour à l'accueil
