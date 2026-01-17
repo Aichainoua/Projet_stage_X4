@@ -1,6 +1,4 @@
-// composables/useApi.ts
 
-// Interface pour typer les erreurs renvoyées par Laravel
 interface LaravelValidationError {
     message: string;
     errors?: Record<string, string[]>; // Ex: { email: ["Email déjà pris"] }
@@ -9,24 +7,21 @@ interface LaravelValidationError {
 export const useApi = () => {
     // --- 1. CONFIGURATION ---
     const config = useRuntimeConfig()
-    // Priorité : Config publique > Fallback local
-    // Note: Assurez-vous que votre nuxt.config.ts a bien runtimeConfig.public.apiBase défini
+   
     let apiBaseUrl = config.public?.apiBase as string || 'http://127.0.0.1:8000/api'
 
-    // Normalisation : On s'assure qu'il n'y a pas de slash à la fin pour éviter les doubles //
+    
     apiBaseUrl = apiBaseUrl.replace(/\/+$/, '') 
-    // Si l'URL ne finit pas par /api, on l'ajoute (optionnel selon votre config serveur)
+  
     if (!apiBaseUrl.endsWith('/api')) {
         apiBaseUrl = `${apiBaseUrl}/api`
     }
 
-    // --- 2. FONCTIONS INTERNES ---
 
     const getAuthHeaders = (isFormData: boolean = false): HeadersInit => {
         const headers: Record<string, string> = {
             'Accept': 'application/json',
-            // IMPORTANT : Si c'est du FormData, on ne met PAS 'Content-Type'. 
-            // Le navigateur le fera avec le boundary.
+           
         }
 
         if (!isFormData) {

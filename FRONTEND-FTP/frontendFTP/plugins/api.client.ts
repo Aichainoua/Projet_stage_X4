@@ -1,6 +1,9 @@
-// Plugin pour s'assurer que useApi est disponible globalement
+
+/// <reference types="nuxt" />
+
+import { defineNuxtPlugin } from '#app'
+
 export default defineNuxtPlugin(() => {
-  // Ce plugin garantit que les composables sont chargés
-  // Nuxt auto-importe déjà les composables, mais ce plugin peut aider
+
 })
 
